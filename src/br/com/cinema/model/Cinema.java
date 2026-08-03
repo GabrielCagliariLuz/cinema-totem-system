@@ -1,5 +1,10 @@
 package br.com.cinema.model;
 
+import br.com.cinema.exception.AssentoIndisponivelException;
+import br.com.cinema.exception.AssentoInexistenteException;
+import br.com.cinema.exception.DadosInvalidosException;
+import br.com.cinema.exception.SessaoConflitoException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,40 +23,55 @@ public class Cinema implements Serializable {
         this.vendas = new ArrayList<>();
     }
 
-    public void cadastrarFilme(Filme filme){
-        if (filme != null && !filmes.contains(filme)){
-            this.filmes.add(filme);
+    public void cadastrarFilme(Filme filme) throws DadosInvalidosException {
+        if (filme == null) {
+            throw new DadosInvalidosException("O filme não pode ser nulo.");
         }
+        if (filme.getTitulo() == null || filme.getTitulo().trim().isEmpty()){
+            throw new DadosInvalidosException("O titulo do filme é obrigatório.");
+        }
+
+        if (filmes.contains(filme)){
+            throw new DadosInvalidosException("Filme já cadastrado no sistema.");
+        }
+        this.filmes.add(filme);
     }
 
-    public void cadastrarSala(Sala sala){
-        if (sala != null && !salas.contains(sala)){
-            this.salas.add(sala);
+    public void cadastrarSala(Sala sala) throws DadosInvalidosException{
+        if (sala == null) {
+            throw new DadosInvalidosException("A sala não pode ser nula.");
         }
+        if (salas.contains(sala)){
+            throw new DadosInvalidosException("Sala já cadastrada no sistema.");
+        }
+        this.salas.add(sala);
     }
 
-    public boolean adicionarSessao(Sessao novaSessao){
+    public void adicionarSessao(Sessao novaSessao) throws SessaoConflitoException, DadosInvalidosException {
         if (novaSessao == null){
-            return false;
+             throw new DadosInvalidosException("A sessão não pode ser nula.");
         }
         for (Sessao s : sessoes){
             if (s.getSala().equals(novaSessao.getSala()) &&
             s.getHorario().equals(novaSessao.getHorario())){
-                return false;
+                throw new SessaoConflitoException(
+                        "A Sala "+ novaSessao.getSala().getNumero() + " já possui uma sessão agendada para "+ novaSessao.getHorario()
+                );
             }
         }
-        sessoes.add(novaSessao);
-        return true;
+        this.sessoes.add(novaSessao);
     }
 
-    public Venda realizarVenda(List<Ingresso> ingressos){
+    public Venda realizarVenda(List<Ingresso> ingressos) throws DadosInvalidosException, AssentoInexistenteException, AssentoIndisponivelException {
         if (ingressos == null || ingressos.isEmpty()){
-            return null;
+            throw new DadosInvalidosException("A lista de ingressos para a venda não pode estar vazia.");
+        }
+        for (Ingresso ing : ingressos){
+            ing.getSessao().ocuparAssento(ing.getAssento().getCodigo());
         }
         Venda novaVenda = new Venda();
         for (Ingresso ing : ingressos){
             novaVenda.adicionarIngresso(ing);
-            ing.getSessao().ocuparAssento(ing.getAssento().getCodigo());
         }
         vendas.add(novaVenda);
         return novaVenda;
@@ -68,6 +88,7 @@ public class Cinema implements Serializable {
     }
 
     public Filme buscarFilmePorTitulo(String titulo){
+        if (titulo == null) return null;
         for (Filme f : filmes){
             if (f.getTitulo().equalsIgnoreCase(titulo)){
                 return f;
