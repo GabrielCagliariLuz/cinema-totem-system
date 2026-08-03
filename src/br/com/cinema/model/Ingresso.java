@@ -2,6 +2,7 @@ package br.com.cinema.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public abstract class Ingresso implements Relatavel{
     private int id;
@@ -39,6 +40,20 @@ public abstract class Ingresso implements Relatavel{
 
     public LocalDateTime getDataHoraCompra() {
         return dataHoraCompra;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ingresso ingresso = (Ingresso) o;
+        return  Objects.equals(sessao, ingresso.sessao) &&
+                Objects.equals(assento, ingresso.assento);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sessao, assento);
     }
 
     @Override

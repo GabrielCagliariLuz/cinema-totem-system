@@ -1,5 +1,7 @@
 package br.com.cinema.model;
 
+import java.util.Objects;
+
 public class Assento{
     private String codigo;
     private StatusAssento statusAssento;
@@ -27,6 +29,19 @@ public class Assento{
 
     public void setStatusAssento(StatusAssento statusAssento) {
         this.statusAssento = statusAssento;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Assento assento = (Assento) o;
+        return  codigo != null ? codigo.equalsIgnoreCase(assento.codigo) : assento.codigo == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return codigo != null ? codigo.toLowerCase().hashCode() : 0;
     }
 
     @Override

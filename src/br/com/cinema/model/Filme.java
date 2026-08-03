@@ -1,5 +1,7 @@
 package br.com.cinema.model;
 
+import java.util.Objects;
+
 public class Filme implements Relatavel{
     private int id;
     private String titulo;
@@ -44,6 +46,19 @@ public class Filme implements Relatavel{
 
     public void setSinopse(String sinopse) {
         this.sinopse = sinopse;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Filme filme = (Filme) o;
+        return id == filme.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
     }
 
     @Override

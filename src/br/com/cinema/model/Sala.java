@@ -1,9 +1,6 @@
 package br.com.cinema.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Sala {
     private int numero;
@@ -47,6 +44,19 @@ public class Sala {
     public Assento buscarAssento(String codigo){
         if (codigo == null) return null;
         return assentos.get(codigo.toUpperCase());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sala sala = (Sala) o;
+        return numero == sala.numero;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(numero);
     }
 
     @Override

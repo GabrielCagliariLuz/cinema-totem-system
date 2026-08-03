@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class Sessao implements Relatavel{
@@ -77,6 +78,19 @@ public class Sessao implements Relatavel{
 
     public void setPrecoIngresso(double precoIngresso) {
         this.precoIngresso = precoIngresso;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sessao sessao = (Sessao) o;
+        return id == sessao.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
     }
 
     @Override
