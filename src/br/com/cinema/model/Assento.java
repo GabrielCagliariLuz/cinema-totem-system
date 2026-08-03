@@ -9,12 +9,19 @@ public class Assento implements Serializable {
     private StatusAssento statusAssento;
 
     public Assento(String codigo, StatusAssento statusAssento) {
+        if (codigo == null || codigo.trim().isEmpty()){
+            throw new IllegalArgumentException("O código do assento é obrigatório.");
+        }
         this.codigo = codigo;
         this.statusAssento = statusAssento;
     }
 
     public Assento(String codigo) {
-        this(codigo, StatusAssento.LIVRE);
+        if (codigo == null || codigo.trim().isEmpty()){
+            throw new IllegalArgumentException("O código do assento é obrigatório.");
+        }
+        this.codigo = codigo.toUpperCase();
+        this.statusAssento = StatusAssento.LIVRE;
     }
 
     public boolean isLivre() {

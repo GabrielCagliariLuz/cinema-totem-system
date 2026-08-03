@@ -1,5 +1,7 @@
 package br.com.cinema.model;
 
+import br.com.cinema.exception.DadosInvalidosException;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,13 +15,26 @@ public class Filme implements Relatavel, Serializable {
     private String sinopse;
     private static int contadorId = 1;
 
-    public Filme(String titulo, int duracaoEmMinutos, Genero genero, String classificacaoEtaria, String sinopse) {
+    public Filme(String titulo, int duracaoEmMinutos, Genero genero, String classificacaoEtaria, String sinopse)
+        throws DadosInvalidosException {
+        if (titulo == null || titulo.trim().isEmpty()){
+            throw  new DadosInvalidosException("O título do filme é obrigatório");
+        }
+        if (duracaoEmMinutos <= 0){
+            throw new DadosInvalidosException("A duração do filme deve ser maior que zero.");
+        }
+        if (genero == null){
+            throw new DadosInvalidosException("O gênero do filme é obrigatório.");
+        }
+        if (classificacaoEtaria == null || classificacaoEtaria.trim().isEmpty()){
+            throw new DadosInvalidosException("A classificação etária é obrigatória.");
+        }
         this.id = contadorId++;
         this.titulo = titulo;
         this.duracaoEmMinutos = duracaoEmMinutos;
         this.genero = genero;
         this.classificacaoEtaria = classificacaoEtaria;
-        this.sinopse = sinopse;
+        this.sinopse = (sinopse != null) ? sinopse.trim() : "";
     }
 
     public int getId() {
