@@ -1,6 +1,6 @@
 package br.com.cinema.model;
 
-public class Assento {
+public class Assento{
     private String codigo;
     private StatusAssento statusAssento;
 
