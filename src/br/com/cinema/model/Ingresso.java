@@ -1,10 +1,12 @@
 package br.com.cinema.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public abstract class Ingresso implements Relatavel{
+public abstract class Ingresso implements Relatavel, Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private double valorPago;
     private Sessao sessao;

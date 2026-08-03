@@ -1,8 +1,10 @@
 package br.com.cinema.model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Sala {
+public class Sala implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int numero;
     private Map<String, Assento> assentos;
     private int qtdAssentos;

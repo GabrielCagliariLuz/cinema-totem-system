@@ -1,9 +1,11 @@
 package br.com.cinema.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cinema {
+public class Cinema implements Serializable {
+    private static final long serialVersionUID = 1L;
     private List<Filme> filmes;
     private List<Sala> salas;
     private List<Sessao> sessoes;

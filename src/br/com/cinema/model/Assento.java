@@ -1,8 +1,10 @@
 package br.com.cinema.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Assento{
+public class Assento implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String codigo;
     private StatusAssento statusAssento;
 

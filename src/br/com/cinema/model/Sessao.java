@@ -1,5 +1,6 @@
 package br.com.cinema.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -7,7 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 
 
-public class Sessao implements Relatavel{
+public class Sessao implements Relatavel, Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private Sala sala;
     private Filme filme;
