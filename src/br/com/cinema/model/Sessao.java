@@ -49,14 +49,26 @@ public class Sessao implements Relatavel, Serializable {
 
     private Map<String, Assento> clonarAssentos(Sala sala){
         Map<String, Assento> novosAssentos = new HashMap<>();
-        for (Map.Entry<String, Assento> entry : sala.getAssentos().entrySet()) {
-            novosAssentos.put(entry.getKey(), new Assento(entry.getValue().getCodigo()));
+        if (sala != null && sala.getAssentos() != null){
+            for (Map.Entry<String, Assento> entry : sala.getAssentos().entrySet()) {
+                novosAssentos.put(entry.getKey(), new Assento(entry.getValue().getCodigo()));
+            }
         }
         return novosAssentos;
     }
 
+    private Object readResolve(){
+        if (this.mapaAssentos == null){
+            this.mapaAssentos = clonarAssentos(this.sala);
+        }
+        return this;
+    }
+
     public Assento buscarAssento(String codigo){
         if (codigo == null) return null;
+        if (this.mapaAssentos == null){
+            this.mapaAssentos = clonarAssentos(this.sala);
+        }
         return mapaAssentos.get(codigo.toUpperCase());
     }
 
@@ -72,6 +84,9 @@ public class Sessao implements Relatavel, Serializable {
     }
 
     public int getQtdAssentosDisponiveis() {
+        if (this.mapaAssentos == null){
+            this.mapaAssentos = clonarAssentos(this.sala);
+        }
         int disponiveis = 0;
         for (Assento a : mapaAssentos.values()){
             if (a.isLivre()){
@@ -102,6 +117,9 @@ public class Sessao implements Relatavel, Serializable {
     }
 
     public Map<String, Assento> getAssentosSessao() {
+        if (this.mapaAssentos == null){
+            this.mapaAssentos = clonarAssentos(this.sala);
+        }
         return mapaAssentos;
     }
 
