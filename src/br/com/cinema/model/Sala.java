@@ -1,5 +1,7 @@
 package br.com.cinema.model;
 
+import br.com.cinema.exception.DadosInvalidosException;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -9,13 +11,23 @@ public class Sala implements Serializable {
     private Map<String, Assento> assentos;
     private int qtdAssentos;
 
-    public Sala(int numero, char ultimaFileira, int assentosPadrao) {
+    public Sala(int numero, char ultimaFileira, int assentosPadrao) throws DadosInvalidosException {
+        if (numero <= 0){
+            throw new DadosInvalidosException("O número da sala não pode ser negativo ou 0");
+        }
+        char ultimaFileiraUpper = Character.toUpperCase(ultimaFileira);
+        if (ultimaFileiraUpper < 'A' || ultimaFileiraUpper > 'Z'){
+            throw new DadosInvalidosException("A última fileira deve ser uma letra válida de 'A' a 'Z'.");
+        }
+        if (assentosPadrao <= 0){
+            throw new DadosInvalidosException("Número de assentos inválido.");
+        }
         this.numero = numero;
         this.assentos = new HashMap<>();
         inicializarAssentos(ultimaFileira, assentosPadrao);
     }
 
-    public Sala(int numero){
+    public Sala(int numero) throws DadosInvalidosException{
         this(numero, 'H', 10);
     }
 
