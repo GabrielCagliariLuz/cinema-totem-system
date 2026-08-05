@@ -1,5 +1,7 @@
 package br.com.cinema.model;
 
+import br.com.cinema.exception.DadosInvalidosException;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,17 +16,26 @@ public class Venda implements Relatavel, Serializable {
     private LocalDateTime dataHora;
     private static int contadorId = 1;
 
-    public Venda() {
+    public Venda(List<Ingresso> ingressos) throws DadosInvalidosException {
+        if (ingressos == null || ingressos.isEmpty()){
+            throw new DadosInvalidosException("Uma venda precisa ter pelo menos um ingresso.");
+        }
         this.codigo = contadorId++;
-        this.ingressos = new ArrayList<>();
+        this.ingressos = new ArrayList<>(ingressos);
         this.dataHora = LocalDateTime.now();
     }
 
-    public void adicionarIngresso(Ingresso ingresso){
+    public void adicionarIngresso(Ingresso ingresso) throws DadosInvalidosException{
+        if (ingresso == null){
+            throw new DadosInvalidosException("Não é possível adicionar um ingresso nulo à venda.");
+        }
         this.ingressos.add(ingresso);
     }
 
-    public void removerIngresso(Ingresso ingresso){
+    public void removerIngresso(Ingresso ingresso) throws DadosInvalidosException{
+        if (this.ingressos.size() <= 1){
+            throw new DadosInvalidosException("A venda não pode ficar sem nenhum ingresso. Cancele a venda se necessário.");
+        }
         this.ingressos.remove(ingresso);
     }
 

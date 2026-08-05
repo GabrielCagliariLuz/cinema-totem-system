@@ -69,11 +69,8 @@ public class Cinema implements Serializable {
         for (Ingresso ing : ingressos){
             ing.getSessao().ocuparAssento(ing.getAssento().getCodigo());
         }
-        Venda novaVenda = new Venda();
-        for (Ingresso ing : ingressos){
-            novaVenda.adicionarIngresso(ing);
-        }
-        vendas.add(novaVenda);
+        Venda novaVenda = new Venda(ingressos);
+        this.vendas.add(novaVenda);
         return novaVenda;
     }
 
