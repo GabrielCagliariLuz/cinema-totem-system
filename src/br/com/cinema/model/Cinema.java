@@ -55,7 +55,7 @@ public class Cinema implements Serializable {
             if (s.getSala().equals(novaSessao.getSala()) &&
             s.getHorario().equals(novaSessao.getHorario())){
                 throw new SessaoConflitoException(
-                        "A Sala "+ novaSessao.getSala().getNumero() + " dejá possui uma sessão agendada para "+ novaSessao.getHorario()
+                        "A Sala "+ novaSessao.getSala().getNumero() + " já possui uma sessão agendada para "+ novaSessao.getHorario()
                 );
             }
         }

@@ -1,5 +1,8 @@
 package br.com.cinema.model;
 
+import br.com.cinema.exception.AssentoIndisponivelException;
+import br.com.cinema.exception.DadosInvalidosException;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,12 +17,24 @@ public abstract class Ingresso implements Relatavel, Serializable {
     private LocalDateTime dataHoraCompra;
     private static int contadorId = 1;
 
-    public Ingresso(Sessao sessao, Assento assento) {
+    public Ingresso(Sessao sessao, Assento assento) throws DadosInvalidosException, AssentoIndisponivelException {
+        if (sessao == null){
+            throw new DadosInvalidosException("A sessão não pode ser nula para emissão do ingresso.");
+        }
+        if (assento == null){
+            throw new DadosInvalidosException("O assento não pode ser nulo para emissão do ingresso.");
+        }
+        if (!assento.isLivre()){
+            throw new AssentoIndisponivelException(assento.getCodigo());
+        }
         this.id = contadorId++;
         this.sessao = sessao;
         this.assento = assento;
         this.dataHoraCompra = LocalDateTime.now();
         this.valorPago = calcularPrecoFinal();
+        if (this.valorPago <= 0){
+            throw new DadosInvalidosException("O valor do ingresso deve ser maior que zero.");
+        }
     }
 
     public abstract double calcularPrecoFinal();
