@@ -1,5 +1,9 @@
 package br.com.cinema.model;
 
+import br.com.cinema.exception.AssentoIndisponivelException;
+import br.com.cinema.exception.AssentoInexistenteException;
+import br.com.cinema.exception.DadosInvalidosException;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,38 +19,61 @@ public class Sessao implements Relatavel, Serializable {
     private Filme filme;
     private LocalDateTime horario;
     private double precoIngresso;
-    private Map<String, Assento> assentosSessao;
+    private Map<String, Assento> mapaAssentos;
     private static int contadorId = 1;
 
-    public Sessao(Sala sala, Filme filme, LocalDateTime horario, double precoIngresso) {
+    public Sessao(Sala sala, Filme filme, LocalDateTime horario, double precoIngresso) throws DadosInvalidosException {
+        if (sala == null){
+            throw new DadosInvalidosException("A sessão tem que ter uma sala.");
+        }
+        if (filme == null){
+            throw new DadosInvalidosException("A sessão tem que ter um filme.");
+        }
+        if (horario == null) {
+            throw new DadosInvalidosException("O horário da sessão é obrigatório.");
+        }
+        if (horario.isBefore(LocalDateTime.now())){
+            throw new DadosInvalidosException("Horário da sessão inválido.");
+        }
+        if (precoIngresso <= 0){
+            throw new DadosInvalidosException("O preço do ingresso deve ser maior que zero.");
+        }
+
         this.id = contadorId++;
         this.sala = sala;
         this.filme = filme;
         this.horario = horario;
         this.precoIngresso = precoIngresso;
-        this.assentosSessao = new HashMap<>();
-        for (String codigo : sala.getAssentos().keySet()) {
-            this.assentosSessao.put(codigo, new Assento(codigo));
+        this.mapaAssentos = clonarAssentos(sala);
+    }
+
+    private Map<String, Assento> clonarAssentos(Sala sala){
+        Map<String, Assento> novosAssentos = new HashMap<>();
+        for (Map.Entry<String, Assento> entry : sala.getAssentos().entrySet()) {
+            novosAssentos.put(entry.getKey(), new Assento(entry.getValue().getCodigo()));
         }
+        return novosAssentos;
     }
 
     public Assento buscarAssento(String codigo){
         if (codigo == null) return null;
-        return assentosSessao.get(codigo.toUpperCase());
+        return mapaAssentos.get(codigo.toUpperCase());
     }
 
-    public boolean ocuparAssento(String codigo){
+    public void ocuparAssento(String codigo) throws AssentoInexistenteException, AssentoIndisponivelException {
         Assento assento = buscarAssento(codigo);
-        if (assento != null && assento.isLivre()){
-            assento.setStatusAssento(StatusAssento.OCUPADO);
-            return true;
+        if (assento == null){
+            throw new AssentoInexistenteException(codigo);
         }
-        return false;
+        if (!assento.isLivre()){
+            throw new AssentoIndisponivelException(codigo);
+        }
+        assento.setStatusAssento(StatusAssento.OCUPADO);
     }
 
     public int getQtdAssentosDisponiveis() {
         int disponiveis = 0;
-        for (Assento a : assentosSessao.values()){
+        for (Assento a : mapaAssentos.values()){
             if (a.isLivre()){
                 disponiveis++;
             }
@@ -75,7 +102,7 @@ public class Sessao implements Relatavel, Serializable {
     }
 
     public Map<String, Assento> getAssentosSessao() {
-        return assentosSessao;
+        return mapaAssentos;
     }
 
     public void setPrecoIngresso(double precoIngresso) {
