@@ -36,8 +36,7 @@ br.com.cinema/
 ## 📱 Demonstração do Projeto
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/e9ce12b4-02de-4a19-a6fb-14142a1ac352" alt="Demonstração CineMaxx" width="100%" />
-  <img width="1905" height="978" alt="demonstracao" src="https://github.com/user-attachments/assets/74f4dcba-0ace-41df-9444-612e225b9cff" />
+  <img src="https://github.com/user-attachments/assets/e9ce12b4-02de-4a19-a6fb-14142a1ac352" alt="Demonstração Cinema" width="100%" />
 </p>
 
 ---
