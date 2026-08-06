@@ -141,6 +141,13 @@ public class Sessao implements Relatavel, Serializable {
     }
 
     @Override
+    public String toString() {
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM HH:mm");
+        return String.format("Sala %d - %s (R$ %.2f)",
+                sala.getNumero(), horario.format(formatter), precoIngresso);
+    }
+
+    @Override
     public String gerarRelatorio() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return String.format(

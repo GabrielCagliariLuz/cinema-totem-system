@@ -79,6 +79,11 @@ public class Filme implements Relatavel, Serializable {
     }
 
     @Override
+    public String toString() {
+        return this.titulo;
+    }
+
+    @Override
     public String gerarRelatorio() {
         return String.format(
                 "=== FILME #%d ===\nTítulo: %s\nGênero: %s\nDuração: %d min\nClassificação: %s\nSinopse: %s",
